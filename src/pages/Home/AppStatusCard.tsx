@@ -10,7 +10,7 @@ type Props = {
 
 export const AppStatusCard: FC<Props> = ({ app }) => {
   const { id } = app;
-  const appName = availableApps.get(id)?.name;
+  const appName = availableApps[id]?.name;
 
   return (
     <a

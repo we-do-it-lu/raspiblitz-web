@@ -20,6 +20,7 @@ export type Props = {
   installingApp: any | null;
   onInstall: (id: string) => void;
   onOpenDetails: (app: App) => void;
+  onOpenCustomComponent?: (app: App) => void;
 };
 
 export const AppCard: FC<Props> = ({
@@ -29,6 +30,7 @@ export const AppCard: FC<Props> = ({
   installingApp,
   onInstall,
   onOpenDetails,
+  onOpenCustomComponent,
 }) => {
   const { id, name } = appInfo;
   const { t } = useTranslation();
@@ -102,12 +104,21 @@ export const AppCard: FC<Props> = ({
             &nbsp;{t("apps.open")}
           </a>
         )}
-        {installed && !appStatusInfo.address && (
+        {installed && !appStatusInfo.address && !appInfo.customComponent && (
           <button
             disabled={true}
             className="flex w-1/2 cursor-default items-center justify-center rounded bg-gray-400 p-2 text-white shadow-md"
           >
             {t("apps.no_page")}
+          </button>
+        )}
+        {installed && appInfo.customComponent && onOpenCustomComponent && (
+          <button
+            onClick={() => onOpenCustomComponent(appInfo)}
+            className="flex w-1/2 items-center justify-center rounded bg-yellow-500 p-2 text-white shadow-md hover:bg-yellow-400"
+          >
+            <ArrowTopRightOnSquareIcon className="inline h-6 w-6" />
+            &nbsp;{t("apps.open")}
           </button>
         )}
         {(installingApp === null ||

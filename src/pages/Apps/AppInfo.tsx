@@ -34,7 +34,7 @@ export const AppInfo: FC<Props> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [imgs, setImgs] = useState<string[]>([]);
   const { id, name } = app;
-  const { author, repository } = availableApps.get(id)!;
+  const { author, repository } = availableApps[id]!;
 
   const video =
     id === "mempool" ? (

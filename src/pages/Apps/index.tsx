@@ -20,6 +20,7 @@ export const Apps: FC = () => {
   const { appStatus, installingApp } = useSSE();
 
   const [showDetails, setShowDetails] = useState(false);
+  const [showCustomComponent, setShowCustomComponent] = useState(false);
   const [app, setApp] = useState<App | null>(null);
 
   useEffect(() => {
@@ -54,9 +55,19 @@ export const Apps: FC = () => {
     setShowDetails(true);
   };
 
+  const openCustomComponent = (app: App) => {
+    setApp(app);
+    setShowCustomComponent(true);
+  };
+
   const closeDetailsHandler = () => {
     setApp(null);
     setShowDetails(false);
+  };
+
+  const closeCustomComponent = () => {
+    setApp(null);
+    setShowCustomComponent(false);
   };
 
   if (showDetails && app) {
@@ -71,6 +82,11 @@ export const Apps: FC = () => {
         onClose={closeDetailsHandler}
       />
     );
+  }
+
+  if (showCustomComponent && app?.customComponent) {
+    const CustomComponent: FC<any> = app.customComponent;
+    return <CustomComponent onClose={closeCustomComponent} />;
   }
 
   return (
@@ -91,11 +107,12 @@ export const Apps: FC = () => {
                 return (
                   <article key={appStatus.id}>
                     <AppCard
-                      appInfo={availableApps.get(appStatus.id)!}
+                      appInfo={availableApps[appStatus.id]!}
                       appStatusInfo={appStatus}
                       installed={true}
                       installingApp={null}
                       onInstall={() => installHandler(appStatus.id)}
+                      onOpenCustomComponent={openCustomComponent}
                       onOpenDetails={openDetailsHandler}
                     />
                   </article>
@@ -112,7 +129,7 @@ export const Apps: FC = () => {
                 return (
                   <article key={appStatus.id}>
                     <AppCard
-                      appInfo={availableApps.get(appStatus.id)!}
+                      appInfo={availableApps[appStatus.id]!}
                       appStatusInfo={appStatus}
                       installed={false}
                       installingApp={installingApp}
